@@ -1,0 +1,631 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>⚖️ Ujian Penentuan Kubu The Arkais Vrtra</title>
+    <link rel="icon" type="image/png" href="logo DW.png" />
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;700&family=Playfair+Display:wght@400;700&display=swap");
+
+      #player {
+        display: none;
+      }
+
+      body {
+        font-family: "Cormorant Garamond", serif;
+        color: #8b4513;
+        margin: 0;
+        padding: 0;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+        overflow-x: hidden;
+        background: url("Dwinpantara BG.png") no-repeat center center fixed;
+        background-size: cover;
+      }
+
+      .container {
+        max-width: 800px;
+        width: 90%;
+        background: rgba(255, 248, 220, 0.9);
+        border: 2px solid #daa520;
+        border-radius: 10px;
+        padding: 20px;
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+        position: relative;
+        z-index: 1;
+      }
+
+      .title {
+        font-family: "Playfair Display", serif;
+        font-size: 2.5em;
+        text-align: center;
+        color: #b22222;
+        margin-bottom: 20px;
+        text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+      }
+
+      .description {
+        font-size: 1.2em;
+        text-align: center;
+        margin-bottom: 30px;
+        line-height: 1.6;
+      }
+
+      .question {
+        margin-bottom: 20px;
+        opacity: 0;
+        animation: type 2s forwards;
+      }
+
+      .question.active {
+        opacity: 1;
+      }
+
+      @keyframes type {
+        from {
+          opacity: 0;
+          transform: translateY(20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .options {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+      }
+
+      .option {
+        background: #f0e68c;
+        border: 1px solid #daa520;
+        padding: 10px;
+        cursor: pointer;
+        transition: all 0.3s;
+        border-radius: 5px;
+      }
+
+      .option:hover {
+        background: #daa520;
+        color: #fff;
+        box-shadow: 0 0 10px rgba(218, 165, 32, 0.5);
+      }
+
+      .result {
+        text-align: center;
+        margin-top: 20px;
+      }
+
+      .result-icon {
+        font-size: 3em;
+        margin-bottom: 10px;
+      }
+
+      .analysis {
+        margin-top: 20px;
+        font-style: italic;
+        line-height: 1.6;
+      }
+
+      .buttons {
+        display: flex;
+        justify-content: center;
+        gap: 20px;
+        margin-top: 30px;
+      }
+
+      button {
+        font-family: "Cormorant Garamond", serif;
+        background: #8b4513;
+        color: #fff;
+        border: none;
+        padding: 10px 20px;
+        cursor: pointer;
+        border-radius: 5px;
+        transition: all 0.3s;
+      }
+
+      button:hover {
+        background: #daa520;
+        box-shadow: 0 0 10px rgba(218, 165, 32, 0.5);
+      }
+
+      .music-toggle {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        background: #8b4513;
+        color: #fff;
+        border: none;
+        padding: 5px 10px;
+        cursor: pointer;
+        border-radius: 5px;
+        z-index: 10;
+      }
+
+      .hidden {
+        display: none;
+      }
+
+      /* Efek sobekan halus di tepi */
+      .container::before {
+        content: "";
+        position: absolute;
+        top: -10px;
+        left: -10px;
+        right: -10px;
+        bottom: -10px;
+        background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><path d="M0,0 Q50,10 100,0 V100 Q50,90 0,100 Z" fill="%23f5f5dc"/></svg>');
+        z-index: -1;
+        opacity: 0.5;
+      }
+    </style>
+  </head>
+  <body>
+    <button class="music-toggle" onclick="toggleMusic()">Musik On/Off</button>
+    <iframe
+      id="player"
+      width="560"
+      height="315"
+      src="https://www.youtube.com/embed/KBjc5Aa0IYE?enablejsapi=1&autoplay=0&loop=1&playlist=KBjc5Aa0IYE"
+      frameborder="0"
+      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+      referrerpolicy="strict-origin-when-cross-origin"
+      allowfullscreen
+    ></iframe>
+
+    <div class="container">
+      <div id="intro">
+        <h1 class="title">⚖️ Ujian Penentuan Kubu Dwipantara</h1>
+        <p class="description">
+          Dalam setiap jiwa tersembunyi arah takdir. Bunga mana yang akan mekar
+          darinya?<br />
+          Jawablah dengan hatimu, bukan logikamu. Dunia tidak menilai benar atau
+          salah — hanya kesetiaanmu pada jalan yang kau pilih.
+        </p>
+        <div class="buttons">
+          <button onclick="startTest()">Mulai Tes</button>
+        </div>
+      </div>
+
+      <div id="quiz" class="hidden">
+        <div id="questions">
+          <!-- Pertanyaan dimuat di sini -->
+        </div>
+      </div>
+
+      <div id="result" class="hidden">
+        <div class="result">
+          <div id="result-icon"></div>
+          <img
+            id="result-image"
+            src=""
+            alt="Result Image"
+            style="max-width: 200px; display: block; margin: 0 auto 10px"
+          />
+          <h2 id="result-title"></h2>
+          <p id="result-desc"></p>
+        </div>
+        <div class="analysis">
+          <p id="brutal-analysis"></p>
+        </div>
+        <div class="buttons">
+          <button onclick="viewResult()">Lihat Hasil Saya</button>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      const questions = [
+        {
+          question: "1. Saat perang hampir pecah, apa langkah pertamamu?",
+          options: [
+            {
+              text: "Mengumpulkan pasukan dan bersiap di garis terdepan",
+              value: "A",
+            },
+            {
+              text: "Menilai titik paling rapuh dan menyiapkan tindakan cepat.",
+              value: "B",
+            },
+            {
+              text: "Menggerakkan pihak lain agar perang terjadi sesuai rencanaku.",
+              value: "C",
+            },
+          ],
+        },
+        {
+          question: "2. Ketika rencana berjalan tidak sesuai harapan…",
+          options: [
+            {
+              text: "Aku mengubah narasi agar kegagalan tampak seperti keberhasilan.",
+              value: "A",
+            },
+            {
+              text: "Aku menyesuaikan dosis dan metode hingga hasil tercapai.",
+              value: "B",
+            },
+            {
+              text: "Menyesuaikan langkah agar kerugian tetap terkendali.",
+              value: "C",
+            },
+          ],
+        },
+        {
+          question: "3. Seorang musuh terluka parah di hadapanmu.",
+          options: [
+            {
+              text: "Aku memastikan ia tidak lagi menjadi ancaman.",
+              value: "A",
+            },
+            {
+              text: "Aku menentukan: diselamatkan, ditahan, atau dibiarkan mati.",
+              value: "B",
+            },
+            {
+              text: "Aku mempertimbangkan nilai informasi atau dampaknya ke depan.",
+              value: "C",
+            },
+          ],
+        },
+        {
+          question: "4. Apa arti kemenangan bagimu?",
+          options: [
+            {
+              text: "Posisi strategisku menguat setelah konflik usai.",
+              value: "A",
+            },
+            {
+              text: "Masalah berhenti dan bisa dikendalikan sepenuhnya.",
+              value: "B",
+            },
+            {
+              text: "Tujuan tercapai tanpa menghancurkan kekuatan sendiri.",
+              value: "C",
+            },
+          ],
+        },
+        {
+          question: "5. Jika harus memilih antara cepat atau tepat…",
+          options: [
+            { text: "Cepat, keraguan membunuh prajurit.", value: "A" },
+            { text: "Tepat, satu kesalahan kecil bisa fatal.", value: "B" },
+            {
+              text: "Yang paling menguntungkan dalam jangka panjang.",
+              value: "C",
+            },
+          ],
+        },
+        {
+          question: "6. Bagaimana caramu menghadapi pengkhianatan?",
+          options: [
+            { text: "Menghukum langsung tanpa basa-basi.", value: "A" },
+            { text: "Mengisolasi sumbernya sebelum menyebar.", value: "B" },
+            {
+              text: "Membiarkannya terjadi untuk melihat siapa lagi yang terlibat.",
+              value: "C",
+            },
+          ],
+        },
+        {
+          question: "7. Dalam kekacauan massal, kau memilih untuk…",
+          options: [
+            {
+              text: "Menjaga stabilitas agar situasi tidak runtuh.",
+              value: "A",
+            },
+            {
+              text: "Masuk langsung dan mengambil alih kendali krisis.",
+              value: "B",
+            },
+            {
+              text: "Mengarahkan kekacauan agar melemahkan lawan.",
+              value: "C",
+            },
+          ],
+        },
+        {
+          question: "8. Apa yang paling kau percaya?",
+          options: [
+            { text: "Sumpah dan kehormatan.", value: "A" },
+            { text: "Perhitungan dan tanggung jawab.", value: "B" },
+            { text: "Rahasia dan kendali.", value: "C" },
+          ],
+        },
+        {
+          question: "9. Saat nyawa banyak orang bergantung padamu…",
+          options: [
+            { text: "Aku maju dan menanggung risikonya.", value: "A" },
+            {
+              text: "Memilih langkah yang meminimalkan kehilangan total.",
+              value: "B",
+            },
+            {
+              text: "Aku memastikan mereka berutang padaku setelahnya.",
+              value: "C",
+            },
+          ],
+        },
+        {
+          question: "10. Bagaimana caramu memimpin?",
+          options: [
+            {
+              text: "Dengan perhitungan dan kesiapan menghadapi risiko.",
+              value: "A",
+            },
+            { text: "Dengan arahan jelas saat situasi genting.", value: "B" },
+            {
+              text: "Dengan memegang informasi yang tidak dimiliki orang lain.",
+              value: "C",
+            },
+          ],
+        },
+        {
+          question: "11. Apa pandanganmu tentang rasa takut?",
+          options: [
+            { text: "Rasa takut ditaklukkan dengan keberanian.", value: "A" },
+            { text: "Rasa takut dikelola agar tidak melumpuhkan.", value: "B" },
+            { text: "Rasa takut adalah alat yang efektif.", value: "C" },
+          ],
+        },
+        {
+          question: "12. Jika dunia menuntut korban…",
+          options: [
+            { text: "Aku memastikan pengorbanannya masuk akal.", value: "A" },
+            {
+              text: "Aku memilih jalan yang paling bisa dikendalikan.",
+              value: "B",
+            },
+            { text: "Aku memastikan kerugiannya menguntungkanku.", value: "C" },
+          ],
+        },
+        {
+          question: "13. Dalam senyap atau sorak sorai?",
+          options: [
+            { text: "Sorak sorai medan perang.", value: "A" },
+            { text: "Senyap, asal hasilnya nyata.", value: "B" },
+            {
+              text: "Senyap, agar tak ada yang tahu aku terlibat.",
+              value: "C",
+            },
+          ],
+        },
+        {
+          question: "14. Apa makna hidup menurutmu?",
+          options: [
+            {
+              text: "Bertahan dan menjaga yang masih bisa diselamatkan.",
+              value: "A",
+            },
+            {
+              text: "Mengendalikan batas antara kehancuran dan keselamatan.",
+              value: "B",
+            },
+            {
+              text: "Mengarahkan dunia ke posisi yang menguntungkanku.",
+              value: "C",
+            },
+          ],
+        },
+        {
+          question: "15. Jika harus melanggar aturan…",
+          options: [
+            {
+              text: "Aku melakukannya bila memang tak ada pilihan lain.",
+              value: "A",
+            },
+            { text: "Aku melakukannya dengan perhitungan penuh.", value: "B" },
+            {
+              text: "Aku akan membuat orang lain yang melakukannya.",
+              value: "C",
+            },
+          ],
+        },
+        {
+          question: "16. Bagaimana kau menghadapi tekanan batin?",
+          options: [
+            {
+              text: "Mengendalikannya agar keputusan tetap rasional.",
+              value: "A",
+            },
+            { text: "Mengubahnya menjadi fokus dan ketenangan.", value: "B" },
+            { text: "Menyembunyikannya di balik topeng.", value: "C" },
+          ],
+        },
+        {
+          question: "17. Saat semua orang panik…",
+          options: [
+            { text: "Aku berteriak memberi komando.", value: "A" },
+            { text: "Aku bertindak cepat tanpa banyak bicara.", value: "B" },
+            {
+              text: "Aku membiarkan mereka panik jika itu menguntungkanku.",
+              value: "C",
+            },
+          ],
+        },
+        {
+          question: "18. Apa senjatamu yang paling berbahaya?",
+          options: [
+            { text: "Ketahanan dan perhitungan.", value: "A" },
+            { text: "Keputusan presisi di saat kritis.", value: "B" },
+            { text: "Pengaruh dan kesepakatan strategis.", value: "C" },
+          ],
+        },
+        {
+          question: "19. Dunia ideal bagimu adalah…",
+          options: [
+            { text: "Dunia yang kuat dan berani.", value: "A" },
+            { text: "Dunia yang stabil dan bisa dipertahankan.", value: "B" },
+            {
+              text: "Dunia yang bisa diarahkan sesuai kepentingan.",
+              value: "C",
+            },
+          ],
+        },
+        {
+          question: "20. Bagaimana kau ingin dikenang?",
+          options: [
+            {
+              text: "Sebagai pihak yang menjaga Dwipantara tetap berdiri.",
+              value: "A",
+            },
+            {
+              text: "Sebagai pihak yang menyelamatkan nyawa di balik perang.",
+              value: "B",
+            },
+            { text: "Sebagai pihak yang mengatur arah sejarah.", value: "C" },
+          ],
+        },
+      ];
+
+      let currentQuestion = 0;
+      let answers = [];
+      const player = document.getElementById("player");
+      let isMusicPlaying = false;
+      let resultData = null;
+
+      // Check if test already completed
+      if (localStorage.getItem("testCompleted")) {
+        answers = JSON.parse(localStorage.getItem("answers"));
+        resultData = JSON.parse(localStorage.getItem("resultData"));
+        showResultFromStorage();
+      }
+
+      function startTest() {
+        if (localStorage.getItem("testCompleted")) {
+          showResultFromStorage();
+          return;
+        }
+        document.getElementById("intro").classList.add("hidden");
+        document.getElementById("quiz").classList.remove("hidden");
+        showQuestion();
+      }
+
+      function showQuestion() {
+        const questionContainer = document.getElementById("questions");
+        questionContainer.innerHTML = "";
+        const q = questions[currentQuestion];
+        const questionDiv = document.createElement("div");
+        questionDiv.className = "question active";
+        questionDiv.innerHTML = `<h3>${q.question}</h3>`;
+        const optionsDiv = document.createElement("div");
+        optionsDiv.className = "options";
+        q.options.forEach((option) => {
+          const opt = document.createElement("div");
+          opt.className = "option";
+          opt.textContent = option.text;
+          opt.onclick = () => selectOption(option.value);
+          optionsDiv.appendChild(opt);
+        });
+        questionDiv.appendChild(optionsDiv);
+        questionContainer.appendChild(questionDiv);
+      }
+
+      function selectOption(value) {
+        answers.push(value);
+        currentQuestion++;
+        if (currentQuestion < questions.length) {
+          showQuestion();
+        } else {
+          showResult();
+        }
+      }
+
+      function showResult() {
+        document.getElementById("quiz").classList.add("hidden");
+        document.getElementById("result").classList.remove("hidden");
+        const counts = { A: 0, B: 0, C: 0 };
+        answers.forEach((ans) => counts[ans]++);
+        let result;
+        if (counts.A > counts.B && counts.A > counts.C) {
+          result = {
+            icon: "⚔️",
+            title: "Bhimantara",
+            desc: "Mereka yang berdiri paling depan, meski tahu harga yang harus dibayar. Terpilihnya Bhimantara menandakan sosok yang mengutamakan keteguhan, keberanian, dan stabilitas medan. Ia bergerak dengan kesadaran akan risiko, namun tidak mundur saat keadaan menuntut pengorbanan. Bhimantara adalah benteng Dwipantara—keras, setia, dan siap runtuh lebih dulu demi yang lain tetap berdiri.",
+            image: "Bhimantara.png",
+          };
+        } else if (counts.B > counts.A && counts.B > counts.C) {
+          result = {
+            icon: "⚖️",
+            title: "Heilgtulp",
+            desc: "Di antara hidup dan hancur, ia memilih kendali. Mereka yang jatuh ke Heilgtulp adalah pribadi dengan perhitungan presisi dan tanggung jawab tinggi. Tidak tergesa, tidak pula ceroboh—setiap keputusan ditimbang dari dampak terluasnya. Heilgtulp berdiri di garis tipis antara kehancuran dan keselamatan, memastikan kekacauan tidak meluas dan korban tetap terkendali.",
+            image: "Heilgtulp.png",
+          };
+        } else {
+          result = {
+            icon: "⚓",
+            title: "Lianhua",
+            desc: "Bukan yang terlihat paling kuat, tapi paling menguntungkan. Mereka memahami bahwa dunia jarang bergerak karena keberanian saja. Mereka membaca celah, menyimpan rahasia, dan membiarkan orang lain percaya mereka memilih jalannya sendiri. Mereka berubah arah tanpa pernah menyadari tangan siapa yang mendorongnya.",
+            image: "Lianhua.png",
+          };
+        }
+        resultData = result;
+        localStorage.setItem("testCompleted", "true");
+        localStorage.setItem("answers", JSON.stringify(answers));
+        localStorage.setItem("resultData", JSON.stringify(resultData));
+        document.getElementById("result-icon").textContent = result.icon;
+        document.getElementById("result-image").src = result.image;
+        document.getElementById("result-title").textContent = result.title;
+        document.getElementById("result-desc").textContent = result.desc;
+        generateAnalysis(counts);
+      }
+
+      function showResultFromStorage() {
+        document.getElementById("intro").classList.add("hidden");
+        document.getElementById("result").classList.remove("hidden");
+        document.getElementById("result-icon").textContent = resultData.icon;
+        document.getElementById("result-image").src = resultData.image;
+        document.getElementById("result-title").textContent = resultData.title;
+        document.getElementById("result-desc").textContent = resultData.desc;
+        const counts = { A: 0, B: 0, C: 0 };
+        answers.forEach((ans) => counts[ans]++);
+        generateAnalysis(counts);
+      }
+
+      function generateAnalysis(counts) {
+        let analysis =
+          "Analisis saya dengan berdasarkan jawaban Anda: Saya tidak di sini untuk menyenangkan Anda, melainkan membuka luka dan kebenaran diri Anda. ";
+        if (counts.A > counts.B && counts.A > counts.C) {
+          analysis +=
+            "Kejujuran dan keberanian Anda adalah pedang bermata dua—Anda melindungi, tapi sering kali melupakan diri sendiri. Api dalam jiwa Anda membakar musuh, tapi juga bisa membakar Anda jika tidak dikontrol.";
+        } else if (counts.B > counts.A && counts.B > counts.C) {
+          analysis +=
+            "Anda adalah jiwa yang lembut, selalu mencari penyembuhan, tapi ini membuat Anda rentan terhadap eksploitasi. Kemanusiaan Anda adalah kekuatan, namun jangan biarkan itu membuat Anda lemah di dunia yang keras.";
+        } else {
+          analysis +=
+            "Jiwa Anda penuh dengan kecerdasan yang dingin, sering kali mengutamakan diri sendiri di atas yang lain. Anda manipulatif, elegan dalam bahaya, tapi hati-hati—kekuasaan ini bisa menghancurkan Anda jika tidak dikendalikan.";
+        }
+        document.getElementById("brutal-analysis").textContent = analysis;
+      }
+
+      function viewResult() {
+        // Hasil sudah tampil di halaman result
+      }
+
+      function toggleMusic() {
+        if (!isMusicPlaying) {
+          player.contentWindow.postMessage(
+            '{"event":"command","func":"playVideo","args":""}',
+            "*"
+          );
+          isMusicPlaying = true;
+          document.querySelector(".music-toggle").textContent = "Musik Off";
+        } else {
+          player.contentWindow.postMessage(
+            '{"event":"command","func":"pauseVideo","args":""}',
+            "*"
+          );
+          isMusicPlaying = false;
+          document.querySelector(".music-toggle").textContent = "Musik On";
+        }
+      }
+    </script>
+  </body>
+</html>
