@@ -492,14 +492,14 @@
       let resultData = null;
 
       // Check if test already completed
-      if (localStorage.getItem("testCompleted")) {
-        answers = JSON.parse(localStorage.getItem("answers"));
-        resultData = JSON.parse(localStorage.getItem("resultData"));
+      if (localStorage.getItem("testCompleted_v2")) {
+        answers = JSON.parse(localStorage.getItem("answers_v2"));
+        resultData = JSON.parse(localStorage.getItem("resultData_v2"));
         showResultFromStorage();
       }
 
       function startTest() {
-        if (localStorage.getItem("testCompleted")) {
+        if (localStorage.getItem("testCompleted_v2")) {
           showResultFromStorage();
           return;
         }
@@ -567,9 +567,9 @@
           };
         }
         resultData = result;
-        localStorage.setItem("testCompleted", "true");
-        localStorage.setItem("answers", JSON.stringify(answers));
-        localStorage.setItem("resultData", JSON.stringify(resultData));
+        localStorage.setItem("testCompleted_v2", "true");
+        localStorage.setItem("answers_v2", JSON.stringify(answers));
+        localStorage.setItem("resultData_v2", JSON.stringify(resultData));
         document.getElementById("result-icon").textContent = result.icon;
         document.getElementById("result-image").src = result.image;
         document.getElementById("result-title").textContent = result.title;
